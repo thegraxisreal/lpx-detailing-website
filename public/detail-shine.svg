@@ -1,0 +1,22 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="720" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111827"/>
+      <stop offset="1" stop-color="#0B1220"/>
+    </linearGradient>
+    <linearGradient id="car" x1="200" y1="390" x2="980" y2="390" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1D4ED8"/>
+      <stop offset="1" stop-color="#38BDF8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="720" fill="url(#bg)"/>
+  <circle cx="980" cy="120" r="170" fill="#2563EB" fill-opacity="0.25"/>
+  <ellipse cx="590" cy="500" rx="360" ry="60" fill="#000" fill-opacity="0.4"/>
+  <path d="M250 430C280 355 370 302 495 292H735C815 295 885 337 940 430H250Z" fill="url(#car)"/>
+  <path d="M405 430C425 365 490 335 565 332H705C770 336 815 365 845 430H405Z" fill="#0F172A" fill-opacity="0.72"/>
+  <circle cx="400" cy="442" r="52" fill="#0B1220" stroke="#94A3B8" stroke-width="8"/>
+  <circle cx="792" cy="442" r="52" fill="#0B1220" stroke="#94A3B8" stroke-width="8"/>
+  <path d="M255 430H945" stroke="#F8FAFC" stroke-opacity="0.28" stroke-width="6"/>
+  <circle cx="311" cy="214" r="10" fill="#F8FAFC"/>
+  <circle cx="366" cy="168" r="7" fill="#F8FAFC" fill-opacity="0.8"/>
+</svg>
