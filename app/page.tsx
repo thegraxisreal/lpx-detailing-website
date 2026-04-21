@@ -95,7 +95,7 @@ export default function Home() {
           </div>
           <div className="relative min-h-[380px] overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40">
             <Image
-              src="https://www.nicepng.com/png/detail/377-3779595_lamborghini-aventador-s-matte-black.png"
+              src="https://chatgpt.com/backend-api/estuary/content?id=file_00000000427471fd92f4bb4ac03fea20&ts=493552&p=fs&cid=1&sig=52c831cd93704de28ee92492b8af9452780e4d24063a39c38c1dc13a2609fa33&v=0"
               alt="Black Lamborghini sports car"
               fill
               className="object-contain p-4 md:p-6"

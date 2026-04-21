@@ -4,6 +4,10 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: 'chatgpt.com'
+      },
+      {
+        protocol: 'https',
         hostname: 'www.nicepng.com'
       }
     ]
