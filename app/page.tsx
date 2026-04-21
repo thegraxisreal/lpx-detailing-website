@@ -95,13 +95,13 @@ export default function Home() {
           </div>
           <div className="relative min-h-[380px] overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40">
             <Image
-              src="https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1700&q=80"
-              alt="Luxury black sedan"
+              src="https://www.nicepng.com/png/detail/377-3779595_lamborghini-aventador-s-matte-black.png"
+              alt="Black Lamborghini sports car"
               fill
-              className="object-cover"
+              className="object-contain p-4 md:p-6"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/30 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/20 to-transparent" />
           </div>
         </div>
       </section>
