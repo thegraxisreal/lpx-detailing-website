@@ -8,7 +8,8 @@ import {
   MapPin,
   Phone,
   ShieldCheck,
-  Sparkles
+  Sparkles,
+  Star
 } from 'lucide-react';
 
 const navLinks = ['Home', 'Services', 'About', 'Why Us', 'Contact'];
@@ -33,6 +34,19 @@ const features = [
     icon: Clock3,
     title: 'Save Time',
     text: 'Professional results without the hassle.'
+  }
+];
+
+const galleryItems = [
+  {
+    src: '/detail-shine.svg',
+    alt: 'Blue sedan with glossy finish after detail',
+    label: 'Exterior Shine'
+  },
+  {
+    src: '/interior-care.svg',
+    alt: 'Luxury interior cleaned and conditioned',
+    label: 'Interior Reset'
   }
 ];
 
@@ -79,7 +93,8 @@ export default function Home() {
         </nav>
       </header>
 
-      <section className="border-b border-white/10">
+      <section className="relative isolate overflow-hidden border-b border-white/10">
+        <div className="hero-glow" />
         <div className="section-container grid min-h-[620px] items-center gap-12 py-14 lg:grid-cols-[1fr_1.15fr]">
           <div>
             <p className="mb-6 text-sm font-semibold tracking-[0.22em] text-accent">PREMIUM MOBILE DETAILING</p>
@@ -89,7 +104,11 @@ export default function Home() {
             <p className="mt-8 max-w-lg text-xl text-zinc-300">
               Professional care. Premium products. Showroom results—at your location.
             </p>
-            <button className="mt-10 rounded-lg bg-accent px-7 py-4 text-xl font-semibold text-white shadow-glow transition hover:bg-blue-500">
+            <div className="mt-8 inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-4 py-2 text-sm text-zinc-100">
+              <Star className="h-4 w-4 text-accent" />
+              Rated 4.9 by local drivers
+            </div>
+            <button className="mt-8 rounded-lg bg-accent px-7 py-4 text-xl font-semibold text-white shadow-glow transition hover:bg-blue-500">
               Book Now
             </button>
           </div>
@@ -115,6 +134,26 @@ export default function Home() {
               <p className="text-lg text-zinc-300 md:text-base">{text}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="border-b border-white/10 py-20">
+        <div className="section-container">
+          <div className="flex flex-col gap-2 text-center">
+            <p className="text-sm font-semibold tracking-[0.24em] text-accent">VISUAL RESULTS</p>
+            <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">CLEAN THAT LOOKS PREMIUM</h2>
+          </div>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            {galleryItems.map(({ src, alt, label }) => (
+              <article key={label} className="overflow-hidden rounded-2xl border border-white/10 bg-panel/70">
+                <div className="relative h-72 w-full">
+                  <Image src={src} alt={alt} fill className="object-cover" />
+                </div>
+                <p className="px-5 py-4 text-lg font-semibold text-zinc-200">{label}</p>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -144,9 +183,7 @@ export default function Home() {
             ))}
           </div>
 
-          <p className="mt-7 text-center text-zinc-400">
-            Final price depends on vehicle size and condition.
-          </p>
+          <p className="mt-7 text-center text-zinc-400">Final price depends on vehicle size and condition.</p>
         </div>
       </section>
 
