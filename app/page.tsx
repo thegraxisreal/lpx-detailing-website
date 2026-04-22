@@ -81,7 +81,7 @@ export default function Home() {
 
       <section className="border-b border-white/10">
         <div className="section-container grid min-h-[620px] items-center gap-12 py-14 lg:grid-cols-[1fr_1.15fr]">
-          <div>
+          <div className="relative z-10">
             <p className="mb-6 text-sm font-semibold tracking-[0.22em] text-accent">PREMIUM MOBILE DETAILING</p>
             <h1 className="max-w-xl text-5xl font-extrabold leading-[0.95] sm:text-6xl lg:text-7xl">
               WE BRING THE DETAILING <span className="text-accent">TO YOU.</span>
@@ -93,15 +93,22 @@ export default function Home() {
               Book Now
             </button>
           </div>
-          <div className="relative min-h-[380px] overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40">
-            <Image
-              src="https://www.nicepng.com/png/detail/377-3779595_lamborghini-aventador-s-matte-black.png"
-              alt="Black Lamborghini sports car"
-              fill
-              className="object-contain p-4 md:p-6"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/20 to-transparent" />
+          <div className="relative min-h-[380px] lg:-ml-24 xl:-ml-32">
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <div className="h-[58%] w-[78%] rounded-full bg-[radial-gradient(circle,rgba(37,99,235,0.22)_0%,rgba(37,99,235,0.08)_40%,rgba(2,6,23,0)_75%)] blur-2xl" />
+            </div>
+            <div className="pointer-events-none absolute bottom-[10%] left-1/2 h-7 w-[58%] -translate-x-1/2 rounded-full bg-black/40 blur-md" />
+            <div className="relative z-10 flex min-h-[380px] items-end pb-2">
+              <Image
+                src="https://pngimg.com/uploads/porsche/porsche_PNG10629.png"
+                alt="Porsche 911 hero image"
+                width={1800}
+                height={900}
+                priority
+                className="h-auto max-w-full object-contain [filter:brightness(0.88)_contrast(1.12)_saturate(0.92)_drop-shadow(0_18px_30px_rgba(0,0,0,0.45))]"
+              />
+            </div>
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background/70 via-background/25 to-transparent" />
           </div>
         </div>
       </section>
