@@ -94,14 +94,21 @@ export default function Home() {
             </button>
           </div>
           <div className="relative min-h-[380px] lg:-ml-24 xl:-ml-32">
-            <Image
-              src="https://www.pngmart.com/files/23/Black-Car-PNG-HD-Isolated.png"
-              alt="Black car hero image"
-              fill
-              className="object-contain"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/25 to-transparent" />
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <div className="h-[58%] w-[78%] rounded-full bg-[radial-gradient(circle,rgba(37,99,235,0.22)_0%,rgba(37,99,235,0.08)_40%,rgba(2,6,23,0)_75%)] blur-2xl" />
+            </div>
+            <div className="pointer-events-none absolute bottom-[10%] left-1/2 h-7 w-[58%] -translate-x-1/2 rounded-full bg-black/40 blur-md" />
+            <div className="relative z-10 flex min-h-[380px] items-end pb-2">
+              <Image
+                src="https://pngimg.com/uploads/porsche/porsche_PNG10629.png"
+                alt="Porsche 911 hero image"
+                width={1800}
+                height={900}
+                priority
+                className="h-auto max-w-full object-contain [filter:brightness(0.88)_contrast(1.12)_saturate(0.92)_drop-shadow(0_18px_30px_rgba(0,0,0,0.45))]"
+              />
+            </div>
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background/70 via-background/25 to-transparent" />
           </div>
         </div>
       </section>

@@ -9,6 +9,10 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'www.pngmart.com'
+      },
+      {
+        protocol: 'https',
+        hostname: 'pngimg.com'
       }
     ]
   }
