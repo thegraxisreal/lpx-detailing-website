@@ -95,10 +95,10 @@ export default function Home() {
           </div>
           <div className="relative min-h-[380px] overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40">
             <Image
-              src="https://www.nicepng.com/png/detail/377-3779595_lamborghini-aventador-s-matte-black.png"
-              alt="Black Lamborghini sports car"
+              src="https://www.pngmart.com/files/23/Black-Car-PNG-HD-Isolated.png"
+              alt="Black car hero image"
               fill
-              className="object-contain p-4 md:p-6"
+              className="object-contain p-1 md:p-2"
               priority
             />
             <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/20 to-transparent" />
