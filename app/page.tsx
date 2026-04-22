@@ -81,7 +81,7 @@ export default function Home() {
 
       <section className="border-b border-white/10">
         <div className="section-container grid min-h-[620px] items-center gap-12 py-14 lg:grid-cols-[1fr_1.15fr]">
-          <div>
+          <div className="relative z-10">
             <p className="mb-6 text-sm font-semibold tracking-[0.22em] text-accent">PREMIUM MOBILE DETAILING</p>
             <h1 className="max-w-xl text-5xl font-extrabold leading-[0.95] sm:text-6xl lg:text-7xl">
               WE BRING THE DETAILING <span className="text-accent">TO YOU.</span>
@@ -93,15 +93,15 @@ export default function Home() {
               Book Now
             </button>
           </div>
-          <div className="relative min-h-[380px] overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40">
+          <div className="relative min-h-[380px] lg:-ml-24 xl:-ml-32">
             <Image
               src="https://www.pngmart.com/files/23/Black-Car-PNG-HD-Isolated.png"
               alt="Black car hero image"
               fill
-              className="object-contain p-1 md:p-2"
+              className="object-contain"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-background/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/25 to-transparent" />
           </div>
         </div>
       </section>
