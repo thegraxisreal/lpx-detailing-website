@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -346,12 +346,9 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
   const [draft, setDraft] = useState<EstimateDraft>(initialDraft);
   const [bookingDraft, setBookingDraft] = useState<BookingDraft>(initialBookingDraft);
   const [uiScale, setUiScale] = useState(1);
-  const [resultContentScale, setResultContentScale] = useState(1);
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [submitState, setSubmitState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [submitMessage, setSubmitMessage] = useState('');
-  const contentScrollRef = useRef<HTMLDivElement | null>(null);
-  const stepContentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!open) {
@@ -412,45 +409,6 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
   const isResultStep = step === stepLabels.length;
   const progress = isResultStep || showBookingForm ? 100 : ((step + 1) / stepLabels.length) * 100;
   const canSendBooking = Boolean(bookingDraft.fullName && bookingDraft.phone && bookingDraft.email && estimate);
-
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
-
-    if (contentScrollRef.current) {
-      contentScrollRef.current.scrollTop = 0;
-    }
-
-    if (!isResultStep || showBookingForm) {
-      setResultContentScale(1);
-      return;
-    }
-
-    const frame = window.requestAnimationFrame(() => {
-      const container = contentScrollRef.current;
-      const content = stepContentRef.current;
-
-      if (!container || !content) {
-        setResultContentScale(1);
-        return;
-      }
-
-      const availableHeight = container.clientHeight;
-      const neededHeight = content.scrollHeight;
-
-      if (neededHeight <= availableHeight) {
-        setResultContentScale(1);
-        return;
-      }
-
-      setResultContentScale(Math.max(0.72, availableHeight / neededHeight));
-    });
-
-    return () => {
-      window.cancelAnimationFrame(frame);
-    };
-  }, [open, isResultStep, showBookingForm, step, uiScale]);
 
   if (!open) {
     return null;
@@ -1214,25 +1172,8 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
           </div>
         </div>
 
-        <div
-          ref={contentScrollRef}
-          className={`min-h-0 flex-1 px-4 py-5 pb-24 sm:max-h-[calc(100vh-9rem)] sm:px-8 sm:py-8 sm:pb-8 ${
-            isResultStep && !showBookingForm ? 'overflow-hidden' : 'overflow-y-auto'
-          }`}
-        >
-          <div
-            ref={stepContentRef}
-            style={{
-              transform: isResultStep && !showBookingForm && resultContentScale < 1 ? `scale(${resultContentScale})` : undefined,
-              transformOrigin: 'top center',
-              width:
-                isResultStep && !showBookingForm && resultContentScale < 1
-                  ? `${100 / resultContentScale}%`
-                  : undefined
-            }}
-          >
-            {renderCurrentStep()}
-          </div>
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5 pb-24 sm:max-h-[calc(100vh-9rem)] sm:px-8 sm:py-8 sm:pb-8">
+          {renderCurrentStep()}
         </div>
 
         {!isResultStep && !showBookingForm ? (
