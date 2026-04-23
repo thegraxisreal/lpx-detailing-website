@@ -345,6 +345,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
   const [step, setStep] = useState(0);
   const [draft, setDraft] = useState<EstimateDraft>(initialDraft);
   const [bookingDraft, setBookingDraft] = useState<BookingDraft>(initialBookingDraft);
+  const [uiScale, setUiScale] = useState(1);
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [submitState, setSubmitState] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [submitMessage, setSubmitMessage] = useState('');
@@ -370,6 +371,35 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [open, onClose]);
+
+  useEffect(() => {
+    if (!open) {
+      return undefined;
+    }
+
+    function updateScale() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      if (width < 640) {
+        setUiScale(1);
+        return;
+      }
+
+      const widthScale = Math.min(1, width / 1280);
+      const heightScale = Math.min(1, height / 900);
+      const compactScale = Math.min(widthScale, heightScale);
+
+      setUiScale(Math.max(0.82, compactScale));
+    }
+
+    updateScale();
+    window.addEventListener('resize', updateScale);
+
+    return () => {
+      window.removeEventListener('resize', updateScale);
+    };
+  }, [open]);
 
   const selectedBrand = getBrandOption(draft.brand);
   const selectedService = getServiceOption(draft.service);
@@ -1101,7 +1131,11 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="estimate-title"
-        className="wizard-pop flex h-[100dvh] w-full flex-col overflow-hidden rounded-none border border-white/10 bg-[#040913] shadow-[0_32px_90px_rgba(0,0,0,0.65)] sm:h-auto sm:max-w-5xl sm:rounded-[2rem]"
+        className="wizard-pop flex h-[100dvh] w-full flex-col overflow-hidden rounded-none border border-white/10 bg-[#040913] shadow-[0_32px_90px_rgba(0,0,0,0.65)] transition-transform duration-200 sm:h-auto sm:max-w-5xl sm:rounded-[2rem]"
+        style={{
+          transform: uiScale < 1 ? `scale(${uiScale})` : undefined,
+          transformOrigin: 'center center'
+        }}
         onClick={(event) => event.stopPropagation()}
       >
         <div className="border-b border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0))] px-4 py-4 sm:px-8 sm:py-5">
