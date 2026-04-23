@@ -1,17 +1,29 @@
+'use client';
+
 import Image from 'next/image';
+import { useState } from 'react';
 import {
   CalendarCheck2,
   Car,
   Check,
   Clock3,
+  ChevronRight,
+  Instagram,
   Mail,
   MapPin,
+  MoveRight,
   Phone,
   ShieldCheck,
   Sparkles
 } from 'lucide-react';
+import { EstimateWizard } from '@/components/EstimateWizard';
 
-const navLinks = ['Home', 'Services', 'About', 'Why Us', 'Contact'];
+const navLinks = [
+  { label: 'Home', target: 'home' },
+  { label: 'Services', target: 'services' },
+  { label: 'Why Us', target: 'why-us' },
+  { label: 'Contact', target: 'contact' }
+] as const;
 
 const features = [
   {
@@ -41,47 +53,88 @@ const services = [
     icon: Car,
     title: 'Basic Detail',
     price: '$40–$60',
-    bullets: ['Exterior wash', 'Window cleaner', 'Interior vacuum', 'Wipe down of inside panels']
+    bullets: ['Exterior wash', 'Window cleaning', 'Interior vacuum', 'Interior panel wipe-down']
+  },
+  {
+    icon: Sparkles,
+    title: 'Full Detail',
+    price: '$90–$120',
+    premium: true,
+    bullets: ['Everything in Basic Detail', 'Tire shine', 'Deep, careful wash', 'Extra finishing detail']
   },
   {
     icon: Sparkles,
     title: 'Exterior Detail',
-    price: 'About $50',
-    bullets: ['Foam cannon', 'Extra attention to exterior', 'Tire shine', 'Window cleaner']
+    price: '$50+',
+    bullets: ['Foam cannon wash', 'Extra attention to exterior', 'Tire shine', 'Window cleaning']
   },
   {
     icon: Car,
     title: 'Interior Detail',
-    price: 'Around $65',
-    bullets: ['Full deep clean inside', 'Vacuuming', 'Wipe down', 'Interior cleaner', 'Restores a like-new feel']
+    price: '$65+',
+    bullets: ['Deep interior cleaning', 'Vacuuming', 'Interior surface wipe-down', 'Interior cleaner throughout']
   }
 ];
 
 export default function Home() {
+  const [isEstimateOpen, setIsEstimateOpen] = useState(false);
+
+  function scrollToSection(sectionId: string) {
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function handleBookNow() {
+    scrollToSection('contact');
+  }
+
   return (
     <main className="min-h-screen bg-background text-white">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-background/95 backdrop-blur">
-        <nav className="section-container flex h-20 items-center justify-between">
-          <div>
-            <p className="text-4xl font-black tracking-tight">LPX</p>
-            <p className="-mt-1 text-xs tracking-[0.35em] text-muted">MOBILE DETAILING</p>
+        <nav className="section-container flex h-20 items-center justify-between gap-4">
+          <div className="relative h-14 w-[11.5rem] shrink-0 sm:w-[13.5rem] lg:w-[16rem]">
+            <Image
+              src="/logo-header.png"
+              alt="LPX Mobile Detailing logo"
+              fill
+              className="object-contain object-left"
+              priority
+            />
           </div>
           <ul className="hidden items-center gap-10 text-lg text-zinc-300 lg:flex">
             {navLinks.map((link) => (
-              <li key={link} className="cursor-pointer transition hover:text-white">
-                {link}
+              <li key={link.label}>
+                <button
+                  type="button"
+                  onClick={() => scrollToSection(link.target)}
+                  className="transition hover:text-white"
+                >
+                  {link.label}
+                </button>
               </li>
             ))}
           </ul>
-          <button className="rounded-lg bg-accent px-6 py-3 text-base font-semibold text-white shadow-glow transition hover:bg-blue-500">
-            Book Now
-          </button>
+          <div className="hidden items-center gap-3 sm:flex">
+            <button
+              type="button"
+              onClick={() => setIsEstimateOpen(true)}
+              className="rounded-lg border border-white/12 bg-white/[0.03] px-5 py-3 text-base font-semibold text-white transition hover:border-white/20 hover:bg-white/[0.06]"
+            >
+              Get Your Estimate
+            </button>
+            <button
+              type="button"
+              onClick={handleBookNow}
+              className="rounded-lg bg-accent px-6 py-3 text-base font-semibold text-white shadow-glow transition hover:bg-blue-500"
+            >
+              Book Now
+            </button>
+          </div>
         </nav>
       </header>
 
-      <section className="border-b border-white/10">
+      <section id="home" className="border-b border-white/10">
         <div className="section-container grid min-h-[620px] items-center gap-12 py-14 lg:grid-cols-[1fr_1.15fr]">
-          <div className="relative z-10">
+          <div>
             <p className="mb-6 text-sm font-semibold tracking-[0.22em] text-accent">PREMIUM MOBILE DETAILING</p>
             <h1 className="max-w-xl text-5xl font-extrabold leading-[0.95] sm:text-6xl lg:text-7xl">
               WE BRING THE DETAILING <span className="text-accent">TO YOU.</span>
@@ -89,31 +142,44 @@ export default function Home() {
             <p className="mt-8 max-w-lg text-xl text-zinc-300">
               Professional care. Premium products. Showroom results—at your location.
             </p>
-            <button className="mt-10 rounded-lg bg-accent px-7 py-4 text-xl font-semibold text-white shadow-glow transition hover:bg-blue-500">
-              Book Now
-            </button>
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={handleBookNow}
+                className="rounded-lg bg-accent px-7 py-4 text-xl font-semibold text-white shadow-glow transition hover:bg-blue-500"
+              >
+                Book Now
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsEstimateOpen(true)}
+                className="rounded-lg border border-white/12 bg-white/[0.03] px-7 py-4 text-xl font-semibold text-white transition hover:border-white/20 hover:bg-white/[0.06]"
+              >
+                Get Your Estimate
+              </button>
+            </div>
+            <p className="mt-4 flex items-center gap-2 text-sm text-zinc-400">
+              <MoveRight className="h-4 w-4 text-accent" />
+              Guided in a few quick steps with pricing tailored to your vehicle.
+            </p>
           </div>
-          <div className="relative min-h-[380px] lg:-ml-24 xl:-ml-32">
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div className="h-[58%] w-[78%] rounded-full bg-[radial-gradient(circle,rgba(37,99,235,0.22)_0%,rgba(37,99,235,0.08)_40%,rgba(2,6,23,0)_75%)] blur-2xl" />
-            </div>
-            <div className="pointer-events-none absolute bottom-[10%] left-1/2 h-7 w-[58%] -translate-x-1/2 rounded-full bg-black/40 blur-md" />
-            <div className="relative z-10 flex min-h-[380px] items-end pb-2">
-              <Image
-                src="https://pngimg.com/uploads/porsche/porsche_PNG10629.png"
-                alt="Porsche 911 hero image"
-                width={1800}
-                height={900}
-                priority
-                className="h-auto max-w-full object-contain [filter:brightness(0.88)_contrast(1.12)_saturate(0.92)_drop-shadow(0_18px_30px_rgba(0,0,0,0.45))]"
-              />
-            </div>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-background/70 via-background/25 to-transparent" />
+          <div className="relative min-h-[420px] overflow-visible">
+            <div className="absolute inset-x-[8%] bottom-[8%] h-24 rounded-full bg-white/30 blur-3xl md:h-28" />
+            <div className="absolute right-[8%] top-[10%] h-40 w-40 rounded-full bg-accent/25 blur-3xl md:h-56 md:w-56" />
+            <div className="absolute left-[18%] top-[14%] h-32 w-32 rounded-full bg-white/10 blur-3xl md:h-44 md:w-44" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_58%_55%,rgba(255,255,255,0.12),transparent_34%),radial-gradient(circle_at_50%_88%,rgba(255,255,255,0.22),transparent_22%)]" />
+            <Image
+              src="/hero-car.png"
+              alt="Black Lamborghini sports car"
+              fill
+              className="scale-[1.22] object-contain drop-shadow-[0_36px_70px_rgba(0,0,0,0.85)] md:translate-x-6 md:scale-[1.32] lg:translate-x-8 lg:scale-[1.4]"
+              priority
+            />
           </div>
         </div>
       </section>
 
-      <section className="border-b border-white/10">
+      <section id="why-us" className="border-b border-white/10">
         <div className="section-container grid grid-cols-1 divide-y divide-white/10 py-6 md:grid-cols-2 md:divide-x md:divide-y-0 lg:grid-cols-4">
           {features.map(({ icon: Icon, title, text }) => (
             <div key={title} className="flex flex-col items-center gap-4 px-8 py-10 text-center">
@@ -130,19 +196,30 @@ export default function Home() {
           <p className="text-center text-sm font-semibold tracking-[0.24em] text-accent">OUR SERVICES</p>
           <h2 className="mt-3 text-center text-4xl font-bold tracking-tight sm:text-5xl">CHOOSE YOUR DETAIL</h2>
 
-          <div className="mt-14 grid gap-6 lg:grid-cols-3">
-            {services.map(({ icon: Icon, title, price, bullets }) => (
+          <div className="mt-12 grid gap-4 lg:grid-cols-2">
+            {services.map(({ icon: Icon, title, price, bullets, premium }) => (
               <article
                 key={title}
-                className="rounded-2xl border border-border bg-panel/80 p-8 shadow-[0_18px_35px_rgba(0,0,0,0.35)]"
+                className={`rounded-2xl border p-6 shadow-[0_18px_35px_rgba(0,0,0,0.35)] ${
+                  premium ? 'border-accent/30 bg-[#071120]' : 'border-border bg-panel/80'
+                }`}
               >
-                <Icon className="h-11 w-11 text-accent" />
-                <h3 className="mt-6 text-3xl font-bold tracking-tight">{title}</h3>
-                <p className="mt-2 text-3xl font-semibold text-accent">{price}</p>
-                <ul className="mt-8 space-y-3 border-t border-white/10 pt-7 text-zinc-200">
+                {premium ? (
+                  <span className="inline-flex rounded-full border border-accent/30 bg-accent/[0.10] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+                    Premium Option
+                  </span>
+                ) : null}
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <Icon className="h-9 w-9 text-accent" />
+                    <h3 className="mt-4 text-2xl font-bold tracking-tight">{title}</h3>
+                  </div>
+                  <p className="text-2xl font-semibold text-accent">{price}</p>
+                </div>
+                <ul className="mt-5 space-y-2 border-t border-white/10 pt-5 text-zinc-200">
                   {bullets.map((bullet) => (
-                    <li key={bullet} className="flex items-start gap-3 text-lg">
-                      <Check className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+                    <li key={bullet} className="flex items-start gap-3 text-base">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
                       <span>{bullet}</span>
                     </li>
                   ))}
@@ -167,42 +244,42 @@ export default function Home() {
             </p>
             <div className="mt-10 space-y-6 text-lg text-zinc-200">
               <p className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-accent" /> (555) 123-4567
+                <Phone className="h-5 w-5 text-accent" /> 518-502-4630
               </p>
               <p className="flex items-center gap-3">
-                <Mail className="h-5 w-5 text-accent" /> hello@lpxdetailing.com
+                <Mail className="h-5 w-5 text-accent" /> lpxmobiledetailing@gmail.com
               </p>
               <p className="flex items-center gap-3">
-                <MapPin className="h-5 w-5 text-accent" /> Serving [Your City] and Surrounding Areas
+                <MapPin className="h-5 w-5 text-accent" /> Mobile service at your home, office, or driveway
+              </p>
+              <p className="flex items-center gap-3">
+                <Instagram className="h-5 w-5 text-accent" /> @lpxmobiledetailing
               </p>
             </div>
           </div>
 
-          <form className="rounded-2xl border border-white/10 bg-panel/70 p-6 shadow-[0_18px_35px_rgba(0,0,0,0.35)] sm:p-8">
-            <div className="grid gap-4 sm:grid-cols-2">
-              {['Full Name', 'Phone Number', 'Email Address', 'Vehicle Make & Model'].map((field) => (
-                <input
-                  key={field}
-                  type="text"
-                  placeholder={field}
-                  className="rounded-lg border border-white/10 bg-black/30 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-accent focus:outline-none"
-                />
-              ))}
+          <div className="rounded-2xl border border-white/10 bg-panel/70 p-6 shadow-[0_18px_35px_rgba(0,0,0,0.35)] sm:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-accent">Guided Booking</p>
+            <h3 className="mt-3 text-3xl font-semibold text-white">Book through the estimate flow</h3>
+            <p className="mt-4 max-w-md text-lg text-zinc-300">
+              Start with the quiz, get your price range, then add your name, contact details, and preferred timing at the end.
+            </p>
+            <div className="mt-8 space-y-3 text-sm text-zinc-400">
+              <p>1. Choose your vehicle and package</p>
+              <p>2. Review your estimate</p>
+              <p>3. Finish with your booking details</p>
             </div>
-            <input
-              type="text"
-              placeholder="Preferred Date & Time"
-              className="mt-4 w-full rounded-lg border border-white/10 bg-black/30 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-accent focus:outline-none"
-            />
-            <textarea
-              placeholder="Additional Details"
-              rows={5}
-              className="mt-4 w-full rounded-lg border border-white/10 bg-black/30 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-accent focus:outline-none"
-            />
-            <button className="mt-5 w-full rounded-lg bg-accent px-6 py-3 text-xl font-semibold text-white shadow-glow transition hover:bg-blue-500">
-              Book Now
+            <button
+              type="button"
+              onClick={() => setIsEstimateOpen(true)}
+              className="mt-5 w-full rounded-lg bg-accent px-6 py-3 text-xl font-semibold text-white shadow-glow transition hover:bg-blue-500"
+            >
+              <span className="inline-flex items-center gap-2">
+                Book Now
+                <ChevronRight className="h-5 w-5" />
+              </span>
             </button>
-          </form>
+          </div>
         </div>
       </section>
 
@@ -212,6 +289,11 @@ export default function Home() {
           <p>© {new Date().getFullYear()} LPX Mobile Detailing. All rights reserved.</p>
         </div>
       </footer>
+
+      <EstimateWizard
+        open={isEstimateOpen}
+        onClose={() => setIsEstimateOpen(false)}
+      />
     </main>
   );
 }
