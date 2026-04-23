@@ -380,17 +380,19 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
     function updateScale() {
       const width = window.innerWidth;
       const height = window.innerHeight;
+      const heightTarget = showBookingForm ? 1040 : 900;
 
       if (width < 640) {
-        setUiScale(1);
+        const mobileHeightScale = Math.min(1, height / 820);
+        setUiScale(Math.max(0.9, mobileHeightScale));
         return;
       }
 
       const widthScale = Math.min(1, width / 1280);
-      const heightScale = Math.min(1, height / 900);
+      const heightScale = Math.min(1, height / heightTarget);
       const compactScale = Math.min(widthScale, heightScale);
 
-      setUiScale(Math.max(0.82, compactScale));
+      setUiScale(Math.max(0.78, compactScale));
     }
 
     updateScale();
@@ -399,7 +401,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
     return () => {
       window.removeEventListener('resize', updateScale);
     };
-  }, [open]);
+  }, [open, showBookingForm]);
 
   const selectedBrand = getBrandOption(draft.brand);
   const selectedService = getServiceOption(draft.service);
