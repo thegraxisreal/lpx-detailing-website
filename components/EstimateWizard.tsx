@@ -1094,21 +1094,21 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
 
   return (
     <div
-      className="fixed inset-0 z-[80] flex items-center justify-center bg-[#02060fcc]/90 px-3 py-3 sm:px-6"
+      className="fixed inset-0 z-[80] flex items-end justify-center bg-[#02060fcc]/90 p-0 sm:items-center sm:px-6 sm:py-3"
       onClick={onClose}
     >
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="estimate-title"
-        className="wizard-pop w-full max-w-5xl overflow-hidden rounded-[2rem] border border-white/10 bg-[#040913] shadow-[0_32px_90px_rgba(0,0,0,0.65)]"
+        className="wizard-pop flex h-[100dvh] w-full flex-col overflow-hidden rounded-none border border-white/10 bg-[#040913] shadow-[0_32px_90px_rgba(0,0,0,0.65)] sm:h-auto sm:max-w-5xl sm:rounded-[2rem]"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="border-b border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0))] px-5 py-5 sm:px-8">
+        <div className="border-b border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0))] px-4 py-4 sm:px-8 sm:py-5">
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.26em] text-accent/80">Get Your Estimate</p>
-              <h2 id="estimate-title" className="mt-3 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+              <h2 id="estimate-title" className="mt-2 text-xl font-semibold tracking-tight text-white sm:mt-3 sm:text-3xl">
                 A quick guided estimate for your vehicle
               </h2>
             </div>
@@ -1122,7 +1122,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
             </button>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-4 sm:mt-6">
             <div className="flex items-center justify-between text-xs font-medium uppercase tracking-[0.18em] text-zinc-500">
               <span>{showBookingForm ? 'Booking details' : isResultStep ? 'Estimate ready' : `Step ${step + 1} of ${stepLabels.length}`}</span>
               <span>{Math.round(progress)}%</span>
@@ -1136,16 +1136,16 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
           </div>
         </div>
 
-        <div className="max-h-[calc(100vh-9rem)] overflow-y-auto px-5 py-6 sm:px-8 sm:py-8">
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5 pb-24 sm:max-h-[calc(100vh-9rem)] sm:px-8 sm:py-8 sm:pb-8">
           {renderCurrentStep()}
         </div>
 
         {!isResultStep && !showBookingForm ? (
-          <div className="flex flex-col gap-3 border-t border-white/10 bg-black/20 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <div className="sticky bottom-0 mt-auto flex flex-row gap-3 border-t border-white/10 bg-[#060c17f5] px-4 py-3 backdrop-blur sm:static sm:flex-row sm:items-center sm:justify-between sm:bg-black/20 sm:px-8 sm:py-4 sm:backdrop-blur-0">
             <button
               type="button"
               onClick={handleBack}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/12 bg-white/[0.03] px-5 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/[0.05]"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl border border-white/12 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/[0.05] sm:flex-none sm:px-5"
             >
               <ArrowLeft className="h-4 w-4" />
               {step === 0 ? 'Close' : 'Back'}
@@ -1154,7 +1154,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
               type="button"
               onClick={handleNext}
               disabled={!isStepComplete(step, draft)}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-accent px-5 py-3 text-sm font-semibold text-white shadow-glow transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-40"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-accent px-4 py-3 text-sm font-semibold text-white shadow-glow transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-40 sm:flex-none sm:px-5"
             >
               {step === stepLabels.length - 1 ? 'See Estimate' : 'Next'}
               <ArrowRight className="h-4 w-4" />
