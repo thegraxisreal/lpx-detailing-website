@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 
-const BOOKING_DESTINATION = 'deweyduck129@gmail.com';
+const BOOKING_DESTINATION = 'lpxmobiledetailing@gmail.com';
 const DEFAULT_SENDER = 'LPX Mobile Detailing <onboarding@resend.dev>';
 
 interface BookingRequestBody {
