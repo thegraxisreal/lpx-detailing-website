@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'LPX Mobile Detailing',
-  description: 'Premium mobile detailing at your location.'
+  description: 'Mobile detailing for drivers across Upstate New York and the 518 area.'
 };
 
 export default function RootLayout({

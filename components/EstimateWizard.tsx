@@ -724,7 +724,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
               <div className="mt-5 space-y-4 text-zinc-200">
                 <p className="flex items-center gap-3">
                   <MapPin className="h-4 w-4 text-accent" />
-                  LPX Mobile Detailing comes to your home, office, or parking spot.
+                  LPX Mobile Detailing comes to you across Upstate NY&apos;s 518 area.
                 </p>
                 <p className="flex items-center gap-3">
                   <Phone className="h-4 w-4 text-accent" />

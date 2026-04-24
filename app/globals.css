@@ -15,6 +15,72 @@ body {
   @apply mx-auto w-full max-w-7xl px-6 md:px-8;
 }
 
+.hero-background {
+  background-position: clamp(120px, 12vw, 220px) center;
+}
+
+.hero-edge-mirror {
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 0;
+  width: clamp(120px, 12vw, 220px);
+  background-image: url("/hero.png");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: auto 100%;
+  transform: scaleX(-1);
+}
+
+@media (max-width: 767px) {
+  .hero-background {
+    isolation: isolate;
+    background-image: none !important;
+    background-position: center center;
+  }
+
+  .hero-background::before,
+  .hero-background::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .hero-background::before {
+    z-index: 0;
+    background-image: url("/hero-mobile.png");
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: auto 90%;
+    filter: brightness(0.78) saturate(1.02) contrast(1.04);
+  }
+
+  .hero-background::after {
+    z-index: 1;
+    background:
+      linear-gradient(180deg, rgba(0, 6, 17, 0.62) 0%, rgba(0, 6, 17, 0.28) 44%, rgba(0, 6, 17, 0.5) 100%),
+      linear-gradient(90deg, rgba(0, 6, 17, 0.58) 0%, rgba(0, 6, 17, 0.28) 54%, rgba(0, 6, 17, 0.12) 100%);
+  }
+
+  .hero-background .section-container > div {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .hero-background h1 {
+    max-width: 21rem;
+    font-size: clamp(2.85rem, 12vw, 3.45rem);
+  }
+
+  .hero-background p {
+    min-width: 0;
+  }
+
+  .hero-edge-mirror {
+    display: none;
+  }
+}
+
 .grid-overlay {
   background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
   background-size: 24px 24px;

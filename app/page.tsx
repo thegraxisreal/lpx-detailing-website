@@ -8,10 +8,10 @@ import {
   Check,
   Clock3,
   ChevronRight,
-  Instagram,
   Mail,
   MapPin,
   MoveRight,
+  Music2,
   Phone,
   ShieldCheck,
   Sparkles
@@ -34,7 +34,7 @@ const features = [
   {
     icon: MapPin,
     title: 'We Come To You',
-    text: 'Home, office, or anywhere.'
+    text: 'Serving the 518 area in Upstate NY.'
   },
   {
     icon: ShieldCheck,
@@ -113,6 +113,13 @@ export default function Home() {
               </li>
             ))}
           </ul>
+          <button
+            type="button"
+            onClick={handleBookNow}
+            className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white shadow-glow transition hover:bg-blue-500 sm:hidden"
+          >
+            Book Now
+          </button>
           <div className="hidden items-center gap-3 sm:flex">
             <button
               type="button"
@@ -132,15 +139,27 @@ export default function Home() {
         </nav>
       </header>
 
-      <section id="home" className="border-b border-white/10">
-        <div className="section-container grid min-h-[620px] items-center gap-12 py-14 lg:grid-cols-[1fr_1.15fr]">
-          <div>
+      <section
+        id="home"
+        className="hero-background relative min-h-[calc(100svh-5rem)] overflow-hidden border-b border-white/10 bg-cover bg-no-repeat"
+        style={{
+          backgroundColor: '#000611',
+          backgroundImage: "url('/hero.png')"
+        }}
+      >
+        <div className="hero-edge-mirror" aria-hidden="true" />
+        <div className="section-container relative z-10 flex min-h-[calc(100svh-5rem)] items-center py-16">
+          <div className="max-w-2xl">
             <p className="mb-6 text-sm font-semibold tracking-[0.22em] text-accent">PREMIUM MOBILE DETAILING</p>
+            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-zinc-200">
+              <MapPin className="h-4 w-4 text-accent" />
+              Serving Upstate NY and the 518 area
+            </p>
             <h1 className="max-w-xl text-5xl font-extrabold leading-[0.95] sm:text-6xl lg:text-7xl">
               WE BRING THE DETAILING <span className="text-accent">TO YOU.</span>
             </h1>
             <p className="mt-8 max-w-lg text-xl text-zinc-300">
-              Professional care. Premium products. Showroom results—at your location.
+              Mobile detailing deals for drivers across the 518 area.
             </p>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <button
@@ -162,19 +181,6 @@ export default function Home() {
               <MoveRight className="h-4 w-4 text-accent" />
               Guided in a few quick steps with pricing tailored to your vehicle.
             </p>
-          </div>
-          <div className="relative min-h-[420px] overflow-visible">
-            <div className="absolute inset-x-[8%] bottom-[8%] h-24 rounded-full bg-white/30 blur-3xl md:h-28" />
-            <div className="absolute right-[8%] top-[10%] h-40 w-40 rounded-full bg-accent/25 blur-3xl md:h-56 md:w-56" />
-            <div className="absolute left-[18%] top-[14%] h-32 w-32 rounded-full bg-white/10 blur-3xl md:h-44 md:w-44" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_58%_55%,rgba(255,255,255,0.12),transparent_34%),radial-gradient(circle_at_50%_88%,rgba(255,255,255,0.22),transparent_22%)]" />
-            <Image
-              src="/hero-car.png"
-              alt="Black Lamborghini sports car"
-              fill
-              className="scale-[1.22] object-contain drop-shadow-[0_36px_70px_rgba(0,0,0,0.85)] md:translate-x-6 md:scale-[1.32] lg:translate-x-8 lg:scale-[1.4]"
-              priority
-            />
           </div>
         </div>
       </section>
@@ -240,7 +246,7 @@ export default function Home() {
             <p className="text-sm font-semibold tracking-[0.24em] text-accent">BOOK YOUR DETAIL</p>
             <h2 className="mt-3 text-5xl font-bold leading-tight">READY WHEN YOU ARE</h2>
             <p className="mt-5 max-w-md text-xl text-zinc-300">
-              Tell us about your vehicle and location. We&apos;ll take care of the rest.
+              Tell us about your vehicle and where you are in the 518. We&apos;ll take care of the rest.
             </p>
             <div className="mt-10 space-y-6 text-lg text-zinc-200">
               <p className="flex items-center gap-3">
@@ -250,10 +256,10 @@ export default function Home() {
                 <Mail className="h-5 w-5 text-accent" /> lpxmobiledetailing@gmail.com
               </p>
               <p className="flex items-center gap-3">
-                <MapPin className="h-5 w-5 text-accent" /> Mobile service at your home, office, or driveway
+                <MapPin className="h-5 w-5 text-accent" /> Mobile service across Upstate NY&apos;s 518 area
               </p>
               <p className="flex items-center gap-3">
-                <Instagram className="h-5 w-5 text-accent" /> @lpxmobiledetailing
+                <Music2 className="h-5 w-5 text-accent" /> TikTok: @lpxmobiledetailing
               </p>
             </div>
           </div>
