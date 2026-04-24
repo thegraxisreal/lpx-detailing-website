@@ -3,6 +3,24 @@ import { Resend } from 'resend';
 const BOOKING_DESTINATION = 'deweyduck129@gmail.com';
 const DEFAULT_SENDER = 'LPX Mobile Detailing <onboarding@resend.dev>';
 
+function resolveResendApiKey() {
+  const candidates = [process.env.RESEND_API_KEY, process.env.RESEND];
+
+  for (const rawCandidate of candidates) {
+    if (typeof rawCandidate !== 'string') {
+      continue;
+    }
+
+    const cleaned = rawCandidate.trim().replace(/^['"]|['"]$/g, '');
+
+    if (cleaned.length > 0) {
+      return cleaned;
+    }
+  }
+
+  return '';
+}
+
 interface BookingRequestBody {
   fullName?: string;
   phone?: string;
@@ -190,11 +208,22 @@ function buildEmailText(booking: NormalizedBooking, submittedAt: string) {
 }
 
 export async function POST(request: Request) {
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = resolveResendApiKey();
 
   if (!apiKey) {
+    const deploymentEnv = process.env.VERCEL_ENV || process.env.NODE_ENV || 'unknown';
+    console.error('Missing Resend API key in booking route.', {
+      deploymentEnv,
+      hasResendApiKey: Boolean(process.env.RESEND_API_KEY),
+      hasResendAlias: Boolean(process.env.RESEND)
+    });
+
     return Response.json(
-      { success: false, error: 'RESEND_API_KEY is not configured on the server.' },
+      {
+        success: false,
+        error:
+          'Resend API key is not configured on the server. Set RESEND_API_KEY in Vercel for this environment and redeploy.'
+      },
       { status: 500 }
     );
   }
