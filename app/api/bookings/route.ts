@@ -208,10 +208,10 @@ function buildEmailText(booking: NormalizedBooking, submittedAt: string) {
 }
 
 export async function POST(request: Request) {
+  const deploymentEnv = process.env.VERCEL_ENV || process.env.NODE_ENV || 'unknown';
   const apiKey = resolveResendApiKey();
 
   if (!apiKey) {
-    const deploymentEnv = process.env.VERCEL_ENV || process.env.NODE_ENV || 'unknown';
     console.error('Missing Resend API key in booking route.', {
       deploymentEnv,
       hasResendApiKey: Boolean(process.env.RESEND_API_KEY),
@@ -222,7 +222,7 @@ export async function POST(request: Request) {
       {
         success: false,
         error:
-          'Resend API key is not configured on the server. Set RESEND_API_KEY in Vercel for this environment and redeploy.'
+          `Resend API key is not configured on the server for ${deploymentEnv}. Set RESEND_API_KEY in Vercel for this environment and redeploy.`
       },
       { status: 500 }
     );
