@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
 
-const BOOKING_DESTINATION = 'lpxmobiledetailing@gmail.com';
-const DEFAULT_SENDER = 'LPX Mobile Detailing <onboarding@resend.dev>';
+const DEFAULT_BOOKING_DESTINATION = 'lpxmobiledetailing@gmail.com';
+const DEFAULT_SENDER = 'LPX Mobile Detailing <bookings@lpxdetailing.com>';
 
 interface BookingRequestBody {
   fullName?: string;
@@ -220,12 +220,13 @@ export async function POST(request: Request) {
   });
   const vehicle = [booking.brandLabel, booking.model].filter(Boolean).join(' ') || 'Vehicle not specified';
   const from = process.env.RESEND_FROM_EMAIL || DEFAULT_SENDER;
+  const to = process.env.RESEND_BOOKING_DESTINATION || DEFAULT_BOOKING_DESTINATION;
   const resend = new Resend(apiKey);
 
   try {
     const { data, error } = await resend.emails.send({
       from,
-      to: [BOOKING_DESTINATION],
+      to: [to],
       subject: `New LPX Booking Request – ${booking.fullName} – ${vehicle}`,
       html: buildEmailHtml(booking, submittedAt),
       text: buildEmailText(booking, submittedAt),
