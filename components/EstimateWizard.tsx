@@ -163,8 +163,8 @@ const serviceOptions: ServiceOption[] = [
     description: 'A fast refresh for vehicles that need a clean reset.',
     bullets: ['Exterior wash', 'Window cleaning', 'Interior vacuum', 'Interior panel wipe-down'],
     estimatedTime: 'About 1.5 hours',
-    baseMin: 40,
-    baseMax: 60
+    baseMin: 70,
+    baseMax: 100
   },
   {
     id: 'full',
@@ -178,8 +178,8 @@ const serviceOptions: ServiceOption[] = [
       'Extra finishing pass throughout'
     ],
     estimatedTime: 'About 3 hours',
-    baseMin: 90,
-    baseMax: 120,
+    baseMin: 100,
+    baseMax: 175,
     premium: true
   },
   {
@@ -188,8 +188,8 @@ const serviceOptions: ServiceOption[] = [
     description: 'Exterior-first care with a polished finish.',
     bullets: ['Foam cannon wash', 'Extra attention to exterior', 'Tire shine', 'Window cleaning'],
     estimatedTime: 'About 1 hour',
-    baseMin: 50,
-    baseMax: 60
+    baseMin: 60,
+    baseMax: 85
   },
   {
     id: 'interior',
@@ -198,7 +198,7 @@ const serviceOptions: ServiceOption[] = [
     bullets: ['Deep interior cleaning', 'Vacuuming', 'Interior surface wipe-down', 'Interior cleaner throughout'],
     estimatedTime: 'About 2 hours',
     baseMin: 65,
-    baseMax: 75
+    baseMax: 90
   }
 ];
 
@@ -227,13 +227,13 @@ const conditionOptions: ConditionOption[] = [
   {
     id: 'moderate',
     label: 'Moderate dirt / normal use',
-    adjustment: 10,
+    adjustment: 15,
     imageSrc: '/estimate-icons/condition-moderate.png'
   },
   {
     id: 'heavy',
     label: 'Heavy dirt / deep cleanup needed',
-    adjustment: 20,
+    adjustment: 30,
     imageSrc: '/estimate-icons/condition-heavy.png'
   }
 ];
@@ -679,7 +679,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
                   Estimated Price: {formatCurrency(estimate.estimateMin)}-{formatCurrency(estimate.estimateMax)}
                 </h3>
                 <p className="mt-3 max-w-xl text-sm text-zinc-300 sm:text-base">
-                  Final price depends on vehicle size, condition, and level of buildup.
+                  Final price depends on vehicle size, condition, level of buildup, and visual inspection on arrival.
                 </p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-zinc-200">
@@ -1063,7 +1063,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
             How dirty is the vehicle?
           </h3>
           <p className="mt-3 max-w-2xl text-sm text-zinc-400 sm:text-base">
-            This helps narrow the final estimate range before you book.
+            This helps narrow the final estimate range before you book. Final pricing may change after visual inspection on arrival.
           </p>
         </div>
 

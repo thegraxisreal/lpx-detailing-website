@@ -52,26 +52,26 @@ const services = [
   {
     icon: Car,
     title: 'Basic Detail',
-    price: '$40–$60',
+    price: '$70-$100',
     bullets: ['Exterior wash', 'Window cleaning', 'Interior vacuum', 'Interior panel wipe-down']
   },
   {
     icon: Sparkles,
     title: 'Full Detail',
-    price: '$90–$120',
+    price: '$100-$175',
     premium: true,
     bullets: ['Everything in Basic Detail', 'Tire shine', 'Deep, careful wash', 'Extra finishing detail']
   },
   {
     icon: Sparkles,
     title: 'Exterior Detail',
-    price: '$50+',
+    price: '$60-$85',
     bullets: ['Foam cannon wash', 'Extra attention to exterior', 'Tire shine', 'Window cleaning']
   },
   {
     icon: Car,
     title: 'Interior Detail',
-    price: '$65+',
+    price: '$65-$90',
     bullets: ['Deep interior cleaning', 'Vacuuming', 'Interior surface wipe-down', 'Interior cleaner throughout']
   }
 ];
@@ -235,7 +235,7 @@ export default function Home() {
           </div>
 
           <p className="mt-7 text-center text-zinc-400">
-            Final price depends on vehicle size and condition.
+            Final price depends on vehicle size, condition, and visual inspection on arrival.
           </p>
         </div>
       </section>
