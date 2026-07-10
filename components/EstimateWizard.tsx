@@ -8,18 +8,21 @@ import {
   Car,
   Check,
   Clock3,
+  Droplets,
   Mail,
   MapPin,
+  PawPrint,
   Phone,
+  Shield,
   Sparkles,
   Truck,
   X
 } from 'lucide-react';
 
 type BrandId = 'toyota' | 'ford' | 'honda' | 'chevrolet' | 'bmw' | 'other';
-type SizeId = 'small' | 'midsize' | 'large';
+type SizeId = 'small' | 'suv' | 'large';
 type ServiceId = 'basic' | 'full' | 'exterior' | 'interior';
-type AddOnId = 'engine-bay' | 'wax';
+type AddOnId = 'ceramic-wax' | 'paint-sealant' | 'engine-bay' | 'trim-restorer' | 'pet-hair';
 type ConditionId = 'light' | 'moderate' | 'heavy';
 
 interface EstimateWizardProps {
@@ -78,16 +81,18 @@ interface ServiceOption {
   description: string;
   bullets: string[];
   estimatedTime: string;
-  baseMin: number;
-  baseMax: number;
+  prices: Record<SizeId, number>;
   premium?: boolean;
 }
 
 interface AddOnOption {
   id: AddOnId;
   label: string;
-  price: number;
-  imageSrc: string;
+  standardMin: number;
+  standardMax: number;
+  fullDetailMin: number;
+  fullDetailMax: number;
+  fullDetailLabel: string;
 }
 
 interface ConditionOption {
@@ -143,15 +148,15 @@ const sizeOptions = [
     icon: Car
   },
   {
-    id: 'midsize' as const,
-    label: 'Midsize SUV / crossover',
-    adjustment: 10,
+    id: 'suv' as const,
+    label: 'SUV',
+    adjustment: 0,
     icon: Car
   },
   {
     id: 'large' as const,
     label: 'Large SUV / truck',
-    adjustment: 20,
+    adjustment: 0,
     icon: Truck
   }
 ];
@@ -163,8 +168,7 @@ const serviceOptions: ServiceOption[] = [
     description: 'A fast refresh for vehicles that need a clean reset.',
     bullets: ['Exterior wash', 'Window cleaning', 'Interior vacuum', 'Interior panel wipe-down'],
     estimatedTime: 'About 1.5 hours',
-    baseMin: 70,
-    baseMax: 100
+    prices: { small: 100, suv: 120, large: 150 }
   },
   {
     id: 'full',
@@ -178,8 +182,7 @@ const serviceOptions: ServiceOption[] = [
       'Extra finishing pass throughout'
     ],
     estimatedTime: 'About 3 hours',
-    baseMin: 100,
-    baseMax: 175,
+    prices: { small: 240, suv: 295, large: 375 },
     premium: true
   },
   {
@@ -188,8 +191,7 @@ const serviceOptions: ServiceOption[] = [
     description: 'Exterior-first care with a polished finish.',
     bullets: ['Foam cannon wash', 'Extra attention to exterior', 'Tire shine', 'Window cleaning'],
     estimatedTime: 'About 1 hour',
-    baseMin: 60,
-    baseMax: 85
+    prices: { small: 90, suv: 110, large: 140 }
   },
   {
     id: 'interior',
@@ -197,23 +199,55 @@ const serviceOptions: ServiceOption[] = [
     description: 'A deeper interior clean for daily-use buildup.',
     bullets: ['Deep interior cleaning', 'Vacuuming', 'Interior surface wipe-down', 'Interior cleaner throughout'],
     estimatedTime: 'About 2 hours',
-    baseMin: 65,
-    baseMax: 90
+    prices: { small: 175, suv: 215, large: 275 }
   }
 ];
 
 const addOnOptions: AddOnOption[] = [
   {
-    id: 'engine-bay',
-    label: 'Engine Bay Cleanup',
-    price: 20,
-    imageSrc: '/estimate-icons/engine-bay-cleanup.png'
+    id: 'ceramic-wax',
+    label: 'Ceramic Spray Wax',
+    standardMin: 25,
+    standardMax: 25,
+    fullDetailMin: 15,
+    fullDetailMax: 15,
+    fullDetailLabel: '$15 with Full Detail'
   },
   {
-    id: 'wax',
-    label: 'Wax',
-    price: 25,
-    imageSrc: '/estimate-icons/wax.png'
+    id: 'paint-sealant',
+    label: 'Paint Sealant / Hydrophobic Protection',
+    standardMin: 35,
+    standardMax: 35,
+    fullDetailMin: 25,
+    fullDetailMax: 25,
+    fullDetailLabel: '$25 with Full Detail'
+  },
+  {
+    id: 'engine-bay',
+    label: 'Engine Bay Cleanup',
+    standardMin: 40,
+    standardMax: 40,
+    fullDetailMin: 30,
+    fullDetailMax: 30,
+    fullDetailLabel: '$30 with Full Detail'
+  },
+  {
+    id: 'trim-restorer',
+    label: 'Trim & Plastic Restorer',
+    standardMin: 20,
+    standardMax: 30,
+    fullDetailMin: 0,
+    fullDetailMax: 0,
+    fullDetailLabel: 'Free with Full Detail'
+  },
+  {
+    id: 'pet-hair',
+    label: 'Pet Hair Removal',
+    standardMin: 30,
+    standardMax: 30,
+    fullDetailMin: 20,
+    fullDetailMax: 20,
+    fullDetailLabel: '$20 with Full Detail'
   }
 ];
 
@@ -282,6 +316,26 @@ function formatCurrency(value: number) {
   return `$${value}`;
 }
 
+function formatPriceRange(min: number, max: number) {
+  return min === max ? formatCurrency(min) : `${formatCurrency(min)}-${formatCurrency(max)}`;
+}
+
+function getAddOnPrice(addon: AddOnOption, serviceId: ServiceId) {
+  return serviceId === 'full'
+    ? { min: addon.fullDetailMin, max: addon.fullDetailMax }
+    : { min: addon.standardMin, max: addon.standardMax };
+}
+
+function getAddOnIcon(addOnId: AddOnId) {
+  const className = 'h-5 w-5';
+
+  if (addOnId === 'ceramic-wax') return <Droplets className={className} />;
+  if (addOnId === 'paint-sealant') return <Shield className={className} />;
+  if (addOnId === 'engine-bay') return <Car className={className} />;
+  if (addOnId === 'trim-restorer') return <Sparkles className={className} />;
+  return <PawPrint className={className} />;
+}
+
 function buildEstimate(draft: EstimateDraft): EstimateResult | null {
   if (!draft.brand || !draft.model || !draft.size || !draft.service || !draft.condition) {
     return null;
@@ -296,12 +350,16 @@ function buildEstimate(draft: EstimateDraft): EstimateResult | null {
     return null;
   }
 
-  const addOnTotal = draft.addons.reduce((total, addonId) => {
+  const addOnTotal = draft.addons.reduce(
+    (total, addonId) => {
     const addon = addOnOptions.find((option) => option.id === addonId);
-    return total + (addon?.price ?? 0);
-  }, 0);
+      const price = addon ? getAddOnPrice(addon, service.id) : { min: 0, max: 0 };
+      return { min: total.min + price.min, max: total.max + price.max };
+    },
+    { min: 0, max: 0 }
+  );
 
-  const adjustmentTotal = size.adjustment + condition.adjustment + addOnTotal;
+  const basePrice = service.prices[draft.size];
 
   return {
     brandLabel: brand.label,
@@ -311,8 +369,8 @@ function buildEstimate(draft: EstimateDraft): EstimateResult | null {
     serviceId: service.id,
     addonsLabels: draft.addons.map(getAddOnLabel),
     conditionLabel: condition.label,
-    estimateMin: service.baseMin + adjustmentTotal,
-    estimateMax: service.baseMax + adjustmentTotal,
+    estimateMin: basePrice + addOnTotal.min,
+    estimateMax: basePrice + addOnTotal.max + condition.adjustment,
     estimatedTime: service.estimatedTime
   };
 }
@@ -503,7 +561,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
       }
 
       setSubmitState('success');
-      setSubmitMessage('Booking request sent. LPX will reach out using the details you provided.');
+      setSubmitMessage('Your estimate and booking request were sent to LPX. We will reach out using the details you provided.');
     } catch (error) {
       setSubmitState('error');
       setSubmitMessage(
@@ -576,10 +634,10 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent/80">Booking Details</p>
             <h3 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              Finish your booking request
+              Send your estimate request
             </h3>
             <p className="mt-3 max-w-2xl text-sm text-zinc-400 sm:text-base">
-              Add your contact details and LPX can confirm the appointment from your estimate.
+              Add your contact details to send this free online estimate and booking request to LPX by email. LPX will confirm pricing and availability from your estimate.
             </p>
           </div>
 
@@ -653,7 +711,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
               disabled={!canSendBooking || submitState === 'loading'}
               className="rounded-2xl bg-accent px-5 py-4 text-base font-semibold text-white shadow-glow transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {submitState === 'loading' ? 'Sending Request...' : 'Submit Booking Request'}
+              {submitState === 'loading' ? 'Sending Request...' : 'Send Estimate & Booking Request'}
             </button>
             <a
               href="tel:5185024630"
@@ -679,7 +737,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
                   Estimated Price: {formatCurrency(estimate.estimateMin)}-{formatCurrency(estimate.estimateMax)}
                 </h3>
                 <p className="mt-3 max-w-xl text-sm text-zinc-300 sm:text-base">
-                  Final price depends on vehicle size, condition, level of buildup, and visual inspection on arrival.
+                  This is a free starting estimate. Send it to LPX with your contact details for a photo or in-person confirmation. Final pricing may change slightly if issues such as stains or mold are found. An approximately $20 mobile fee may apply by location.
                 </p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-zinc-200">
@@ -724,7 +782,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
               <div className="mt-5 space-y-4 text-zinc-200">
                 <p className="flex items-center gap-3">
                   <MapPin className="h-4 w-4 text-accent" />
-                  LPX Mobile Detailing comes to you across Upstate NY&apos;s 518 area.
+                  LPX offers semi-mobile detailing across Upstate NY&apos;s 518 area. Free estimates are available online, by photo, or in person.
                 </p>
                 <p className="flex items-center gap-3">
                   <Phone className="h-4 w-4 text-accent" />
@@ -752,7 +810,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
               onClick={() => setShowBookingForm(true)}
               className="rounded-2xl bg-accent px-5 py-4 text-base font-semibold text-white shadow-glow transition hover:bg-blue-500"
             >
-              Continue to Booking
+              Send This Estimate to LPX
             </button>
             <button
               type="button"
@@ -910,7 +968,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
                     <div className="rounded-2xl border border-white/10 bg-black/25 p-3">
                       <Icon className="h-7 w-7 text-zinc-100" />
                     </div>
-                    <span className="text-sm font-medium text-zinc-400">+{formatCurrency(adjustment)}</span>
+                    <span className="text-sm font-medium text-zinc-400">Starting-price tier</span>
                   </div>
                   <p className="mt-5 text-xl font-semibold text-white">{label}</p>
                 </button>
@@ -962,7 +1020,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
                       <p className="mt-2 text-sm text-zinc-400">{service.description}</p>
                     </div>
                     <span className="rounded-full border border-white/10 bg-black/20 px-3 py-2 text-sm font-medium text-zinc-100">
-                      {formatCurrency(service.baseMin)}-{formatCurrency(service.baseMax)}
+                      Starts at {formatCurrency(draft.size ? service.prices[draft.size] : Math.min(...Object.values(service.prices)))}
                     </span>
                   </div>
                   <ul className="mt-6 space-y-3 border-t border-white/10 pt-5">
@@ -992,44 +1050,50 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
       return (
         <div className="wizard-fade-in space-y-6">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent/80">Step 5</p>
-            <h3 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Any add-ons?</h3>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent/80">Step 5 · Finish your detail</p>
+            <h3 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">Choose the finishing touches.</h3>
             <p className="mt-3 max-w-2xl text-sm text-zinc-400 sm:text-base">
-              Add finishing services to round out the detail.
+              {draft.service === 'full'
+                ? 'Your Full Detail savings are already applied below.'
+                : 'Every add-on is discounted with a Full Detail. Prices shown here are starting estimates.'}
             </p>
           </div>
+
+          {draft.service === 'full' ? (
+            <div className="estimate-value-callout">
+              <Sparkles className="h-5 w-5" />
+              <p><strong>Full Detail perk:</strong> every add-on below has its discounted Full Detail price.</p>
+            </div>
+          ) : null}
 
           <div className="grid gap-3 md:grid-cols-2">
             {addOnOptions.map((addon) => {
               const selected = draft.addons.includes(addon.id);
+              const price = getAddOnPrice(addon, draft.service || 'basic');
 
               return (
                 <button
                   key={addon.id}
                   type="button"
                   onClick={() => toggleAddon(addon.id)}
-                  className={`rounded-[1.5rem] border p-5 text-left transition duration-300 ${
+                  className={`estimate-addon rounded-[1.5rem] border p-5 text-left transition duration-300 ${
                     selected
-                      ? 'translate-y-[-1px] border-accent/60 bg-accent/[0.12] shadow-glow'
-                      : 'border-white/10 bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.05]'
+                      ? 'is-selected translate-y-[-1px] border-accent/70 bg-accent/[0.12] shadow-glow'
+                      : 'border-white/10 bg-white/[0.03] hover:border-accent/35 hover:bg-white/[0.06]'
                   }`}
                 >
                   <div className="flex items-center gap-4">
-                    <div className="relative h-[4.5rem] w-[4.5rem] shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-black/20">
-                      <Image
-                        src={addon.imageSrc}
-                        alt={addon.label}
-                        fill
-                        className="object-contain p-0.5"
-                      />
-                    </div>
+                    <span className="estimate-addon-icon">{getAddOnIcon(addon.id)}</span>
                     <div className="min-w-0 flex-1">
                       <p className="text-xl font-semibold text-white">{addon.label}</p>
+                      <p className="mt-1 text-sm text-zinc-400">
+                        {draft.service === 'full' ? addon.fullDetailLabel : `${formatPriceRange(addon.standardMin, addon.standardMax)}`}
+                      </p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="text-sm font-medium text-zinc-400">+{formatCurrency(addon.price)}</span>
+                      <span className="text-sm font-semibold text-zinc-300">+{formatPriceRange(price.min, price.max)}</span>
                       <span
-                        className={`flex h-6 w-6 items-center justify-center rounded-full border ${
+                        className={`flex h-7 w-7 items-center justify-center rounded-full border transition ${
                           selected ? 'border-accent bg-accent text-white' : 'border-white/20 text-transparent'
                         }`}
                       >
@@ -1041,15 +1105,30 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
               );
             })}
 
-            {draft.addons.length === 0 ? (
-              <button
-                type="button"
-                onClick={() => setDraft((current) => ({ ...current, addons: [] }))}
-                className="rounded-[1.5rem] border border-accent/30 bg-accent/[0.08] p-5 text-left transition duration-300 hover:border-accent/50"
-              >
-                <p className="text-xl font-semibold text-white">No add-ons</p>
-              </button>
-            ) : null}
+            <button
+              type="button"
+              onClick={() => setDraft((current) => ({ ...current, addons: [] }))}
+              className={`estimate-addon rounded-[1.5rem] border p-5 text-left transition duration-300 ${
+                draft.addons.length === 0
+                  ? 'is-selected border-accent/70 bg-accent/[0.12] shadow-glow'
+                  : 'border-white/10 bg-white/[0.03] hover:border-accent/35 hover:bg-white/[0.06]'
+              }`}
+            >
+              <div className="flex items-center gap-4">
+                <span className="estimate-addon-icon"><Check className="h-5 w-5" /></span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xl font-semibold text-white">Keep it simple</p>
+                  <p className="mt-1 text-sm text-zinc-400">No add-ons for this visit</p>
+                </div>
+                <span
+                  className={`flex h-7 w-7 items-center justify-center rounded-full border transition ${
+                    draft.addons.length === 0 ? 'border-accent bg-accent text-white' : 'border-white/20 text-transparent'
+                  }`}
+                >
+                  <Check className="h-4 w-4" />
+                </span>
+              </div>
+            </button>
           </div>
         </div>
       );
@@ -1063,7 +1142,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
             How dirty is the vehicle?
           </h3>
           <p className="mt-3 max-w-2xl text-sm text-zinc-400 sm:text-base">
-            This helps narrow the final estimate range before you book. Final pricing may change after visual inspection on arrival.
+            This helps narrow the estimate before you book. Your final price is confirmed after a photo or in-person estimate and may change slightly if issues such as stains or mold are found.
           </p>
         </div>
 
@@ -1133,19 +1212,19 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="estimate-title"
-        className="wizard-pop flex h-[100dvh] w-full flex-col overflow-hidden rounded-none border border-white/10 bg-[#040913] shadow-[0_32px_90px_rgba(0,0,0,0.65)] transition-transform duration-200 sm:h-auto sm:max-w-5xl sm:rounded-[2rem]"
+        className="estimate-dialog wizard-pop flex h-[100dvh] w-full flex-col overflow-hidden rounded-none border border-white/10 shadow-[0_32px_90px_rgba(0,0,0,0.65)] transition-transform duration-200 sm:h-auto sm:max-w-6xl sm:rounded-[2rem]"
         style={{
           transform: uiScale < 1 ? `scale(${uiScale})` : undefined,
           transformOrigin: 'center center'
         }}
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="border-b border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0))] px-4 py-4 sm:px-8 sm:py-5">
+        <div className="estimate-header border-b border-white/10 px-4 py-4 sm:px-8 sm:py-5">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.26em] text-accent/80">Get Your Estimate</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#8eafff]">LPX · Free estimate</p>
               <h2 id="estimate-title" className="mt-2 text-xl font-semibold tracking-tight text-white sm:mt-3 sm:text-3xl">
-                A quick guided estimate for your vehicle
+                Build your perfect detail
               </h2>
             </div>
             <button
@@ -1163,9 +1242,9 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
               <span>{showBookingForm ? 'Booking details' : isResultStep ? 'Estimate ready' : `Step ${step + 1} of ${stepLabels.length}`}</span>
               <span>{Math.round(progress)}%</span>
             </div>
-            <div className="mt-3 h-1.5 rounded-full bg-white/10">
+            <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/10">
               <div
-                className="h-full rounded-full bg-accent transition-all duration-500 ease-out"
+                className="h-full rounded-full bg-[linear-gradient(90deg,#1e5bff,#74a3ff)] shadow-[0_0_18px_rgba(79,130,255,0.8)] transition-all duration-500 ease-out"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -1181,7 +1260,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
             <button
               type="button"
               onClick={handleBack}
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl border border-white/12 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-white transition hover:border-white/20 hover:bg-white/[0.05] sm:flex-none sm:px-5"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-white/12 bg-white/[0.03] px-4 py-3 text-sm font-semibold text-white transition hover:border-white/30 hover:bg-white/[0.08] sm:flex-none sm:px-5"
             >
               <ArrowLeft className="h-4 w-4" />
               {step === 0 ? 'Close' : 'Back'}
@@ -1190,7 +1269,7 @@ export function EstimateWizard({ open, onClose }: EstimateWizardProps) {
               type="button"
               onClick={handleNext}
               disabled={!isStepComplete(step, draft)}
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-2xl bg-accent px-4 py-3 text-sm font-semibold text-white shadow-glow transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-40 sm:flex-none sm:px-5"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-[linear-gradient(135deg,#1e5bff,#3f80ff)] px-5 py-3 text-sm font-semibold text-white shadow-[0_10px_28px_rgba(30,91,255,0.3)] transition hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(30,91,255,0.45)] disabled:cursor-not-allowed disabled:opacity-40 sm:flex-none"
             >
               {step === stepLabels.length - 1 ? 'See Estimate' : 'Next'}
               <ArrowRight className="h-4 w-4" />
