@@ -111,7 +111,7 @@ export default function Home() {
             type="button"
             onClick={() => scrollToSection('home')}
             aria-label="Back to top"
-            className="relative h-14 w-[11.5rem] shrink-0 transition hover:scale-[1.02] sm:w-[13.5rem] lg:w-[16rem]"
+            className="relative h-12 w-36 shrink-0 transition hover:scale-[1.02] sm:h-14 sm:w-[13.5rem] lg:w-[16rem]"
           >
             <Image
               src="/logo-header.png"
