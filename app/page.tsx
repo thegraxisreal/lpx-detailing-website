@@ -244,14 +244,14 @@ export default function Home() {
                     Premium Option
                   </span>
                 ) : null}
-                <div className="flex items-start justify-between gap-4">
-                  <div>
+                <div className="mt-5 flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="flex items-center gap-3 sm:block">
                     <div className="inline-flex rounded-2xl border border-white/10 bg-black/20 p-3"><Icon className="h-7 w-7 text-[#8eafff]" /></div>
-                    <h3 className="mt-4 text-2xl font-bold tracking-tight">{title}</h3>
+                    <h3 className="text-2xl font-bold tracking-tight sm:mt-4">{title}</h3>
                   </div>
-                  <p className="rounded-full border border-accent/20 bg-accent/[0.08] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#8eafff]">Starting prices</p>
+                  <p className="self-start rounded-full border border-accent/20 bg-accent/[0.08] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#8eafff]">Starting prices</p>
                 </div>
-                <dl className="mt-5 space-y-2 border-t border-white/10 pt-5 text-sm">
+                <dl className="mt-4 space-y-2 border-t border-white/10 pt-5 text-sm sm:mt-5">
                   {prices.map(([vehicle, price]) => (
                     <div key={vehicle} className="flex items-baseline justify-between gap-4 text-zinc-300">
                       <dt>{vehicle}</dt>
